@@ -1,0 +1,56 @@
+databaseChangeLog:
+  - changeSet:
+      id: 03-create-comments-table
+      author: saranya
+      runOnChange: true
+      
+      changes:
+        - createTable:
+            tableName: comments
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                   
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: comments_user
+                    references: users(id)
+
+              - column:
+                  name: post_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    references: posts(id)
+                    foreignKeyName: comments_post
+
+              - column:
+                  name: comment
+                  type: VARCHAR(500)
+                  constraints:
+                    nullable: false
+                   
+              - column:
+                  name: created_at
+                  type: DATETIME 
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+              - column:
+                  name: updated_at
+                  type: DATETIME
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+              - column:
+                  name: deleted_at
+                  type: DATETIME 
+                  
+                 
+                  

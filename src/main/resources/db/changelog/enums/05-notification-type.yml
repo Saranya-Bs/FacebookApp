@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 05-notification-type-enum
+      author: saranya
+      runOnChange: true
+      
+      changes:
+        - sql:
+            sql: "ALTER TABLE notifications ADD CONSTRAINT check_notification_type CHECK(notification_type IN('POST','COMMENT','REACTION'))"

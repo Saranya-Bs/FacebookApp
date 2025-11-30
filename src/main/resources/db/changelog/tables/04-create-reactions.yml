@@ -1,0 +1,53 @@
+databaseChangeLog:
+  - changeSet:
+      id: 04-create-reactions-table
+      author: saranya
+      runOnChange: true
+      
+      changes:
+        - createTable:
+            tableName: reactions
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    references: users(id)
+                    foreignKeyName: reaction_from_user
+                    
+              - column:
+                  name: post_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    references: posts(id)
+                    foreignKeyName: reaction_to_post
+
+              - column:
+                  name: reaction
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    
+              - column:
+                  name: created_at
+                  type: DATETIME
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+              - column:
+                  name: updated_at
+                  type: DATETIME
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+              - column:
+                  name: deleted_at
+                  type: DATETIME
+                 

@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 01-account-status-enum
+      author: saranya
+      runOnChange: true
+
+      changes:
+        - sql:
+            sql: "ALTER TABLE users ADD CONSTRAINT check_status CHECK(account_status IN('ACTIVE','INACTIVE'))"
+

@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/tables/01-create-users.yml
+    
+ 
+
+  - include:
+      file: db/changelog/tables/02-create-posts.yml
+
+  
+
+  - include:
+      file: db/changelog/tables/03-create-comments.yml
+
+  - include:
+      file: db/changelog/tables/04-create-reactions.yml
+
+  - include:
+      file: db/changelog/tables/05-create-friend-requests.yml
+
+  - include:
+      file: db/changelog/tables/06-create-notifications.yml
+
+  - include:
+      file: db/changelog/enums/03-reaction.yml
+      
+ 
+      
+  - include:
+      file: db/changelog/enums/04-request-status.yml
+
+  
+
+  - include:
+      file: db/changelog/enums/01-account-status.yml
+
+  - include:
+      file: db/changelog/enums/02-post-status.yml
+
+  - include:
+      file: db/changelog/enums/05-notification-type.yml

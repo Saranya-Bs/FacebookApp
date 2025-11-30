@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 04-request-status-enum
+      author: saranya
+      runOnChange: true
+      
+      changes:
+        - sql:
+            sql: "ALTER TABLE friend_requests ADD CONSTRAINT check_request_status CHECK(request_status IN('PENDING','ACCEPTED','DECLINED'))"

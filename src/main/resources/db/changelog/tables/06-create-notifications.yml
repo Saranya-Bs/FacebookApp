@@ -1,0 +1,64 @@
+databaseChangeLog:
+  - changeSet:
+      id: 06-create-notifications-table
+      author: saranya
+      runOnChange: true
+      
+      changes:
+        - createTable:
+            tableName: notifications
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    
+              - column:
+                  name: sender_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    references: users(id)
+                    foreignKeyName: notification_sender 
+                    
+              - column:
+                  name: receiver_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    references: users(id)
+                    foreignKeyName: notification_receiver
+
+              - column:
+                  name: notification
+                  type: VARCHAR(500)
+                  constraints:
+                    nullable: false
+                    
+              - column:
+                  name: notification_type
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+                    
+              - column:
+                  name: is_read
+                  type: BIT
+                  defaultValue: "0"
+
+              - column:
+                  name: created_at
+                  type: DATETIME
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                 
+              - column:
+                  name: updated_at
+                  type: DATETIME
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  
+              - column:
+                  name: deleted_at
+                  type: DATETIME
+                 

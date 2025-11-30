@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 03-reaction-enum
+      author: saranya
+      runOnChange: true
+
+      changes:
+        - sql:
+            sql: "ALTER TABLE reactions ADD CONSTRAINT check_reaction CHECK(reaction IN('SMILE','LIKE','SAD','ANGRY'))"

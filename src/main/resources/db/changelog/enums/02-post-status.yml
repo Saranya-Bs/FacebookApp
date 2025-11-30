@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 02-post-status-enum
+      author: saranya
+      runOnChange: true
+      
+      changes:
+        - sql:
+            sql: "ALTER TABLE posts ADD CONSTRAINT check_post_status CHECK(post_status IN ('HIDDEN','ACTIVE'))"
