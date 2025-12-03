@@ -1,6 +1,6 @@
 package com.facebookapp.entities;
 
-public enum AccountStatus {
+public enum PostStatus {
     ACTIVE,
-    INACTIVE
+    HIDDEN
 }

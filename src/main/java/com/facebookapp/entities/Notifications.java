@@ -1,8 +1,6 @@
 package com.facebookapp.entities;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,45 +9,40 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "users")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class User {
-
+@AllArgsConstructor
+@Table(name = "notifications")
+public class Notifications {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name")
-    private String firstName;
+    @ManyToOne
+    @JoinColumn(name = "sender_id", nullable = false)
+    private User senderId;
 
-    @Column(name = "last_name")
-    private String lastName;
+    @ManyToOne
+    @JoinColumn(name = "receiver_id", nullable = false)
+    private User receiverId;
 
-    private String email;
-
-    private String password;
-
-    private String profile;
-
-    @Column(name = "date_of_birth")
-    private LocalDate dateOfBirth;
+    private String notification;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "account_status")
-    private AccountStatus accountStatus;
+    private NotificationType notificationType;
+
+    private Boolean isRead;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -59,14 +52,5 @@ public class User {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
-
-    @OneToMany(mappedBy = "userId")
-    private List<Post> posts;
-
-    @OneToMany(mappedBy = "userId")
-    private List<Comment> comments;
-
-    @OneToMany(mappedBy = "userId")
-    private List<Reaction> reactions;
     
 }
