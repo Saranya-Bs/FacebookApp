@@ -33,7 +33,7 @@ databaseChangeLog:
 
               - column:
                   name: reaction
-                  type: BIGINT
+                  type: VARCHAR(200)
                   constraints:
                     nullable: false
                     

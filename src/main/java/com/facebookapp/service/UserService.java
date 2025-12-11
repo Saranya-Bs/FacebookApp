@@ -1,12 +1,13 @@
 package com.facebookapp.service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.facebookapp.entities.AccountStatus;
 import com.facebookapp.entities.User;
+import com.facebookapp.exception.UserNotFoundException;
 import com.facebookapp.repository.UserRepository;
 
 @Service
@@ -23,12 +24,18 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Optional<User> getUserById(Long id){
-        return userRepository.findById(id);
+    public List<User> getUsers(){
+        return userRepository.findAll();
     }
 
-    public Optional<User> getUserByEmail(String email){
-        return userRepository.findByEmail(email);
+    public User getUserById(Long id){
+        return userRepository.findById(id)
+            .orElseThrow(()->new UserNotFoundException("User not found with id: "+id));
+    }
+
+    public User getUserByEmail(String email){
+        return userRepository.findByEmail(email)
+            .orElseThrow(()->new UserNotFoundException("User not found with email: "+email));
     }
 
     public User updateProfile(Long userId,String profile){
@@ -49,4 +56,5 @@ public class UserService {
         return userRepository.save(user);
 
     }
+
 }

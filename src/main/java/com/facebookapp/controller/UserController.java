@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.facebookapp.entities.User;
 import com.facebookapp.service.UserService;
 
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
 
+@Slf4j
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -26,28 +31,63 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) { 
-        System.out.println("AAAAAAAAAAAAAAADDDDDDDDDDDD");       
-        return ResponseEntity.ok(userService.createUser(user));
+        log.info("Creating new user with the email: {}",user.getEmail());
+
+        User createdUser=userService.createUser(user);
+        log.info("User Created with given email");
+
+        return ResponseEntity.ok(createdUser);
     }
+
+    @GetMapping
+    public ResponseEntity<List<User>> getUsers() {
+        log.info("Fetching All Users");
+        List<User> users=userService.getUsers();
+        log.info("Users fetched.");
+        return ResponseEntity.ok(users);
+    }
+    
     
     @GetMapping("/id/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        return ResponseEntity.of(userService.getUserById(id));
+        log.info("Fetching User with id: {}",id);
+        User user=userService.getUserById(id);
+
+        if(user==null){
+            log.warn("User not found with the id: {}",id);
+            return ResponseEntity.notFound().build();
+        }
+
+        log.debug("Fetched User: {}",user);
+        return ResponseEntity.ok(user);
     }
     
     @GetMapping("/email/{email}")
     public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
-        return ResponseEntity.of(userService.getUserByEmail(email));
+        log.info("Fetching User with email: {}",email);
+        User user=userService.getUserByEmail(email);
+
+        if(user==null){
+            log.warn("User not found with the email: {}",email);
+            return ResponseEntity.notFound().build();
+        }
+
+        log.debug("Fetched user: {}",user);
+        return ResponseEntity.ok(user);
     }
     
     @PutMapping("/{id}")
     public ResponseEntity<User> updateProfile(@PathVariable Long id, @RequestBody String profile) {
+        log.info("Updating Profile of User with id: {}",id);
         return ResponseEntity.ok(userService.updateProfile(id, profile));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable Long id){
-        return ResponseEntity.ok(userService.deleteUser(id));
+        log.info("Deleting user with id:{}",id);
+        User deletedUser=userService.deleteUser(id);
+        log.info("Soft Delete of the user with id: {} is performed",id);
+        return ResponseEntity.ok(deletedUser);
     }
 
 

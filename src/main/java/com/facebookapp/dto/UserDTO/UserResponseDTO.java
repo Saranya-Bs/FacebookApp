@@ -1,12 +1,17 @@
 package com.facebookapp.dto.UserDTO;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-public class UserRegisterRequest {
+import com.facebookapp.entities.AccountStatus;
+
+public class UserResponseDTO {
+    public Long id;
     public String firstName;
     public String lastName;
     public String email;
-    public String password;
     public LocalDate dateOfBirth;
     public String profile;
+    public AccountStatus accountStatus;
+    public LocalDateTime createdAt;
 }
