@@ -4,6 +4,11 @@ import java.time.LocalDateTime;
 
 import com.facebookapp.entities.NotificationType;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class NotificationDTO {
     public Long id;
     public Long senderId;
