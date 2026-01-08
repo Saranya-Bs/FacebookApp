@@ -3,11 +3,11 @@ package com.facebookapp.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.facebookapp.dto.ApiResponseDTO;
 import com.facebookapp.dto.FriendRequestDTO.FriendRequestResponse;
+import com.facebookapp.dto.FriendRequestDTO.FriendsDTO;
 import com.facebookapp.dto.FriendRequestDTO.SendFriendRequest;
 import com.facebookapp.entities.FriendRequest;
 import com.facebookapp.entities.NotificationType;
@@ -15,7 +15,7 @@ import com.facebookapp.entities.RequestStatus;
 import com.facebookapp.entities.User;
 import com.facebookapp.exception.FriendRequestException;
 import com.facebookapp.exception.UnSupportedOperationException;
-import com.facebookapp.exception.UserNotFoundException;
+import com.facebookapp.exception.NotFoundException;
 import com.facebookapp.repository.FriendRequestRepository;
 import com.facebookapp.repository.UserRepository;
 import com.facebookapp.security.SecurityUtil;
@@ -33,12 +33,12 @@ public class FriendRequestService {
         this.notificationService=notificationService;
     }
     
-    public ResponseEntity<ApiResponseDTO> sendFriendRequest(SendFriendRequest FriendRequest){
+    public ApiResponseDTO sendFriendRequest(SendFriendRequest FriendRequest){
 
 
-        User currentUser=userRepository.findByEmail(SecurityUtil.getLoggedInUserEmail()).orElseThrow(()-> new UserNotFoundException("User not found with email: "+SecurityUtil.getLoggedInUserEmail()));
+        User currentUser=userRepository.findByEmail(SecurityUtil.getLoggedInUserEmail()).orElseThrow(()-> new NotFoundException("User not found with email: "+SecurityUtil.getLoggedInUserEmail()));
 
-        User receiver=userRepository.findById(FriendRequest.receiverId).orElseThrow(()->new UserNotFoundException("User not found with id: "+FriendRequest.receiverId));
+        User receiver=userRepository.findById(FriendRequest.receiverId).orElseThrow(()->new NotFoundException("User not found with id: "+FriendRequest.receiverId));
 
         if(receiver.getId()==currentUser.getId()){
             throw new UnSupportedOperationException("Request to self is not supported");
@@ -72,15 +72,15 @@ public class FriendRequestService {
 
         notificationService.createNotification(currentUser, receiver, currentUser.getFirstName()+"sent you a friend request", NotificationType.FRIEND_REQUEST);
 
-        return ResponseEntity.ok(new ApiResponseDTO(
+        return new ApiResponseDTO(
             true,
             "Friend request sent successfully",
             LocalDateTime.now()
-        ));
+        );
     }
 
     public List<FriendRequestResponse> getPendingRequests(){
-        User currentUser=userRepository.findByEmail(SecurityUtil.getLoggedInUserEmail()).orElseThrow(()-> new UserNotFoundException("User not found with email: "+SecurityUtil.getLoggedInUserEmail()));
+        User currentUser=userRepository.findByEmail(SecurityUtil.getLoggedInUserEmail()).orElseThrow(()-> new NotFoundException("User not found with email: "+SecurityUtil.getLoggedInUserEmail()));
 
         return friendRequestRepository
                 .findByReceiverIdAndRequestStatus(currentUser,RequestStatus.PENDING)
@@ -98,8 +98,8 @@ public class FriendRequestService {
                 .toList();
     }
 
-    public ResponseEntity<ApiResponseDTO> acceptRequest(Long requestId){
-        User currentUser=userRepository.findByEmail(SecurityUtil.getLoggedInUserEmail()).orElseThrow(()-> new UserNotFoundException("User not found with email: "+SecurityUtil.getLoggedInUserEmail()));
+    public ApiResponseDTO acceptRequest(Long requestId){
+        User currentUser=userRepository.findByEmail(SecurityUtil.getLoggedInUserEmail()).orElseThrow(()-> new NotFoundException("User not found with email: "+SecurityUtil.getLoggedInUserEmail()));
 
         FriendRequest request=friendRequestRepository.findById(requestId).orElseThrow(()->new FriendRequestException("Request Not Found!"));
 
@@ -110,11 +110,11 @@ public class FriendRequestService {
 
         notificationService.createNotification(currentUser, request.getSenderId(), currentUser.getFirstName()+"accepted your friend request", NotificationType.FRIEND_REQUEST_ACCEPTED);
 
-        return ResponseEntity.ok(new ApiResponseDTO(true,"Request Accepted",LocalDateTime.now()));
+        return new ApiResponseDTO(true,"Request Accepted",LocalDateTime.now());
     }
 
-    public ResponseEntity<ApiResponseDTO> declineRequest(Long requestId){
-        User currentUser=userRepository.findByEmail(SecurityUtil.getLoggedInUserEmail()).orElseThrow(()-> new UserNotFoundException("User not found with email: "+SecurityUtil.getLoggedInUserEmail()));
+    public ApiResponseDTO declineRequest(Long requestId){
+        User currentUser=userRepository.findByEmail(SecurityUtil.getLoggedInUserEmail()).orElseThrow(()-> new NotFoundException("User not found with email: "+SecurityUtil.getLoggedInUserEmail()));
 
         FriendRequest request=friendRequestRepository.findById(requestId).orElseThrow(()->new FriendRequestException("Request Not Found!"));
 
@@ -125,6 +125,13 @@ public class FriendRequestService {
 
         notificationService.createNotification(currentUser, request.getSenderId(), currentUser.getFirstName()+"declined your friend request", NotificationType.FRIEND_REQUEST_ACCEPTED);
 
-        return ResponseEntity.ok(new ApiResponseDTO(true,"Request Declined",LocalDateTime.now()));
+        return new ApiResponseDTO(true,"Request Declined",LocalDateTime.now());
+    }
+
+    public List<FriendsDTO> getAllFriends(){
+        User currentUser=userRepository.findByEmail(SecurityUtil.getLoggedInUserEmail()).orElseThrow(()-> new NotFoundException("User not found with email: "+SecurityUtil.getLoggedInUserEmail()));
+
+        return friendRequestRepository.findBySenderIdAndRequestStatus(currentUser,RequestStatus.ACCEPTED);
+
     }
 }

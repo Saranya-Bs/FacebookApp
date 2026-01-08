@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.facebookapp.dto.FriendRequestDTO.FriendsDTO;
 import com.facebookapp.entities.FriendRequest;
 import com.facebookapp.entities.RequestStatus;
 import com.facebookapp.entities.User;
@@ -14,4 +15,6 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest,Lon
     Optional<FriendRequest> findBySenderIdAndReceiverId(User sender,User receiver);
 
     List<FriendRequest> findByReceiverIdAndRequestStatus(User receiverId,RequestStatus status);
+
+    List<FriendsDTO> findBySenderIdAndRequestStatus(User senderId,RequestStatus status);
 }

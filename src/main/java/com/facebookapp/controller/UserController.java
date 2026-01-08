@@ -3,6 +3,7 @@ package com.facebookapp.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.facebookapp.dto.UserDTO.UserResponse;
 import com.facebookapp.entities.User;
 import com.facebookapp.service.UserService;
 
@@ -40,9 +41,9 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getUsers() {
+    public ResponseEntity<List<UserResponse>> getUsers() {
         log.info("Fetching All Users");
-        List<User> users=userService.getUsers();
+        List<UserResponse> users=userService.getUsers();
         log.info("Users fetched.");
         return ResponseEntity.ok(users);
     }

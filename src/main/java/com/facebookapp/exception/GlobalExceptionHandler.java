@@ -11,8 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex){
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Object> handleUserNotFoundException(NotFoundException ex){
         return new ResponseEntity<>(ex.getMessage(),HttpStatus.NOT_FOUND);
     }
 
@@ -24,11 +24,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(FriendRequestException.class)
     public ResponseEntity<Object> handleFriendRequestException(FriendRequestException ex){
         return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(NotificationNotFoundException.class)
-    public ResponseEntity<Object> handleNotificationNotFoundException(NotificationNotFoundException ex){
-        return new ResponseEntity<>(ex.getMessage(),HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)

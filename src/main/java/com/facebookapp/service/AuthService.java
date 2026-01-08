@@ -61,7 +61,7 @@ import com.facebookapp.repository.UserRepository;
         try{
             authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                    loginDto.email, loginDto.password)
+                    loginDto.getEmail(), loginDto.getPassword())
             );
         }catch(BadCredentialsException e){
             throw new RuntimeException("Invalid email or password");

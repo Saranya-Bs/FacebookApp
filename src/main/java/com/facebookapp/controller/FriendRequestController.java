@@ -31,7 +31,7 @@ public class FriendRequestController {
 
     @PostMapping("/sendRequest")
     public ResponseEntity<ApiResponseDTO> sendFriendRequest(@RequestBody SendFriendRequest request) {
-        return friendRequestService.sendFriendRequest(request);
+        return ResponseEntity.ok(friendRequestService.sendFriendRequest(request));
     }
 
     @GetMapping("/pendingRequests")
@@ -41,11 +41,11 @@ public class FriendRequestController {
     
     @PatchMapping("/acceptRequest/{requestId}")
     public ResponseEntity<ApiResponseDTO> acceptRequest(@PathVariable Long requestId){
-        return friendRequestService.acceptRequest(requestId);
+        return ResponseEntity.ok(friendRequestService.acceptRequest(requestId));
     }
     
     @PatchMapping("/declineRequest/{requestId}")
     public ResponseEntity<ApiResponseDTO> declineRequest(@PathVariable Long requestId){
-        return friendRequestService.declineRequest(requestId);
+        return ResponseEntity.ok(friendRequestService.declineRequest(requestId));
     }
 }

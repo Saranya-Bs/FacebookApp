@@ -8,6 +8,15 @@ import com.facebookapp.entities.Comment;
 import com.facebookapp.entities.Post;
 import com.facebookapp.entities.Reaction;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDTO {
     public Long id;
     public String firstName;

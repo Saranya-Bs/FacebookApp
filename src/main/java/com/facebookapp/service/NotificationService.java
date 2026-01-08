@@ -9,9 +9,8 @@ import com.facebookapp.dto.NotificationDTO;
 import com.facebookapp.entities.NotificationType;
 import com.facebookapp.entities.Notifications;
 import com.facebookapp.entities.User;
-import com.facebookapp.exception.NotificationNotFoundException;
 import com.facebookapp.exception.UnSupportedOperationException;
-import com.facebookapp.exception.UserNotFoundException;
+import com.facebookapp.exception.NotFoundException;
 import com.facebookapp.repository.NotificationRepository;
 import com.facebookapp.repository.UserRepository;
 import com.facebookapp.security.SecurityUtil;
@@ -41,7 +40,7 @@ public class NotificationService {
     }
 
     public List<NotificationDTO> getAllNotifications(){
-        User currentUser=userRepository.findByEmail(SecurityUtil.getLoggedInUserEmail()).orElseThrow(()-> new UserNotFoundException("User not found with email: "+SecurityUtil.getLoggedInUserEmail()));
+        User currentUser=userRepository.findByEmail(SecurityUtil.getLoggedInUserEmail()).orElseThrow(()-> new NotFoundException("User not found with email: "+SecurityUtil.getLoggedInUserEmail()));
 
         List<Notifications> list=notificationRepository.findAllByReceiverId(currentUser);
 
@@ -61,7 +60,7 @@ public class NotificationService {
     }
 
     public List<NotificationDTO> getUnReadNotifications(){
-        User currentUser=userRepository.findByEmail(SecurityUtil.getLoggedInUserEmail()).orElseThrow(()-> new UserNotFoundException("User not found with email: "+SecurityUtil.getLoggedInUserEmail()));
+        User currentUser=userRepository.findByEmail(SecurityUtil.getLoggedInUserEmail()).orElseThrow(()-> new NotFoundException("User not found with email: "+SecurityUtil.getLoggedInUserEmail()));
         List<Notifications> list=notificationRepository.findByReceiverIdAndIsReadFalse(currentUser);
 
         List<NotificationDTO> result=list.stream()
@@ -80,12 +79,12 @@ public class NotificationService {
     }
 
     public void markAsRead(Long notificationId){
-        User currentUser=userRepository.findByEmail(SecurityUtil.getLoggedInUserEmail()).orElseThrow(()-> new UserNotFoundException("User not found with email: "+SecurityUtil.getLoggedInUserEmail()));
-        Notifications notification =notificationRepository.findById(notificationId).orElseThrow(()->new NotificationNotFoundException("Notification not Found"));
+        User currentUser=userRepository.findByEmail(SecurityUtil.getLoggedInUserEmail()).orElseThrow(()-> new NotFoundException("User not found with email: "+SecurityUtil.getLoggedInUserEmail()));
+        Notifications notification =notificationRepository.findById(notificationId).orElseThrow(()->new NotFoundException("Notification not Found"));
 
 
 
-        if(notification.getReceiverId().getId()!=currentUser.getId()){
+        if(!notification.getReceiverId().getId().equals(currentUser.getId())){
             throw new UnSupportedOperationException("You do not have access to this notification");
         }
 

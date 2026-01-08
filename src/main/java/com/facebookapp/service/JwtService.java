@@ -9,9 +9,11 @@ import com.facebookapp.entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
-
+@Slf4j
 @Service
 public class JwtService {
     @Value("${jwt.secret}")
@@ -40,12 +42,15 @@ public class JwtService {
     }
 
     public boolean validateToken(String token,UserDetails user){
+        log.info("validating token method executed");
         String tokenEmail=extractClaims(token).getSubject();
+        log.info(tokenEmail);
+        log.info(user.getUsername());
+        
         if(!user.getUsername().equals(tokenEmail)){
             return false;
         }
-
-        return !isTokenExpired(tokenEmail);
+        return !isTokenExpired(token);
     }
 
     
